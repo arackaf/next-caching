@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useTransition } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { invalidateA, invalidateAll, invalidateB, invalidateC } from "@/app/actions";
@@ -8,6 +8,8 @@ import { invalidateA, invalidateAll, invalidateB, invalidateC } from "@/app/acti
 export const Content: FC<{ a: any; b: any; c: any }> = (props) => {
   const params = useParams();
   const path = usePathname();
+
+  const [running, startInvalidation] = useTransition();
 
   return (
     <div className="p-12">
@@ -24,10 +26,42 @@ export const Content: FC<{ a: any; b: any; c: any }> = (props) => {
         </div>
 
         <div className="flex gap-5">
-          <button onClick={invalidateA}>Invalidate A</button>
-          <button onClick={invalidateB}>Invalidate B</button>
-          <button onClick={invalidateC}>Invalidate C</button>
-          <button onClick={invalidateAll}>Invalidate All</button>
+          <button
+            onClick={() =>
+              startInvalidation(() => {
+                invalidateA();
+              })
+            }
+          >
+            Invalidate A
+          </button>
+          <button
+            onClick={() =>
+              startInvalidation(() => {
+                invalidateB();
+              })
+            }
+          >
+            Invalidate B
+          </button>
+          <button
+            onClick={() =>
+              startInvalidation(() => {
+                invalidateC();
+              })
+            }
+          >
+            Invalidate C
+          </button>
+          <button
+            onClick={() =>
+              startInvalidation(() => {
+                invalidateAll();
+              })
+            }
+          >
+            Invalidate All
+          </button>
         </div>
       </div>
     </div>
